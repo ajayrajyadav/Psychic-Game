@@ -3,12 +3,12 @@ var alphabet = "abcdefghijklmnopqrstuvwxyz"; //all the possible guesses
 var guess = 9; // chances you get to guess
 var winsSoFar = 0; //how many games you won so far
 var lossesSoFar = 0; //track how many times you lost
-var yourGuess = ""; //empty string to save your guess
+
 var yourGuessesSoFar = []; //saving your past guesses
 var correctAnswer; //the letter you are trying to guess
 
 var gameObject = {
-    superHeroWords: ["Ironman", "superman", "Antman", "Vasp", "Hulk", "Thor", "Wonderwoman", "Flash", "Aquaman", "Spiderman"],
+    superHeroWords: ["ironman", "superman", "antman", "vasp", "hulk", "thor", "wonderwoman", "flash", "aquaman", "spiderman"],
     alphabet: "abcdefghijklmnopqrstuvwxyz",
     winsSoFar: 0,
     lossesSoFar: 0,
@@ -16,39 +16,65 @@ var gameObject = {
     yourGuessesSoFar: "",
     gameOver: false,
     dashesAndGuesses: [],
-};
+    guess: 0,
+}
 
-var userText = document.getElementById("user-text");
+var yourGuess = ""; //empty string to save your guess
 
+var tbUserText = document.getElementById("user-text");
+var tbCorrectWord = document.getElementById("correct-word");
+var tbGuessesLeft = document.getElementById("guesses-left")
+
+tbUserText.textContent = createCorrectAnswer();
+tbCorrectWord.textContent = correctAnswerWithDashesAndGuesses(yourGuess);
+tbGuessesLeft.textContent = gameObject.guess;
+//listen to user when they enter a letter
 document.onkeyup = function(event) {
-    userText.textContent = createCorrectAnswer();
+    yourGuess = event.key.toLowerCase();
+    if(gameObject.guess > 0 && validateUserGuess(yourGuess)){
+        tbGuessesLeft.textContent = gameObject.guess;
+        // console.log(validateUserGuess(yourGuess));
+    }
+    // tbUserText.textContent = createCorrectAnswer();
+    // tbUserText.textContent = gameObject.correctAnswer;
+    tbCorrectWord.textContent = correctAnswerWithDashesAndGuesses(yourGuess);
   };
 
 //create a word to guess
 function createCorrectAnswer(){
-    gameObject.correctAnswer = gameObject.superHeroWords[Math.floor(Math.random() * gameObject.superHeroWords.length)];
-    for (let i = 0; i < gameObject.correctAnswer.length; i++) {
-        gameObject.dashesAndGuesses[i] = "_";
+    gameStarted = true;
+    gameObject.dashesAndGuesses = [];
+    returnStr = gameObject.correctAnswer = gameObject.superHeroWords[Math.floor(Math.random() * gameObject.superHeroWords.length)];
+    gameObject.guess = returnStr.length * 2;
+    return returnStr;
+    // for (let i = 0; i < gameObject.correctAnswer.length; i++) {
+    //     gameObject.dashesAndGuesses[i] = "_";
+    // }
+    // return gameObject.dashesAndGuesses.join(" ");
+}
+
+//publish the Correct Answer with '_'
+function correctAnswerWithDashesAndGuesses(userGuess){
+    for (let index = 0; index < gameObject.correctAnswer.length; index++) {
+        if(userGuess===""){
+            gameObject.dashesAndGuesses[index] = "_";
+        }else if(gameObject.correctAnswer[index]=== userGuess){
+            gameObject.dashesAndGuesses[index] = userGuess;
+        } 
     }
     return gameObject.dashesAndGuesses.join(" ");
 }
 
-//publish the Correct Answer with '_'
-function correctAnswerWithDashesToString(){
-
-}
-function correctAnswerWithDashesAndGuesses(userGuess){
-    var stringWGuess = "";
-    for (let index = 0; index < correctAnswer.length; index++) {
-        if(correctAnswer[index]=== userGuess){
-            dashesAndGuesses[index] = userGuess;
-        }  
+//check so it is not the same letter as before
+function validateUserGuess(userGuess){
+    //make sure the guess is part of the alphabet
+    if (gameObject.alphabet.includes(userGuess) || (!userGuess==="Enter")) {
+        gameObject.guess--;
+        return true;
+    } else {
+        return false;
     }
 }
-
-//listen to user when they enter a letter
-
-//check so it is not the same letter as before
 
 //if it is the same as correctAnswer then you win
 
@@ -57,6 +83,8 @@ function correctAnswerWithDashesAndGuesses(userGuess){
 //otherwise save your guess into an array of guesses so far
 
 //increase number of losses so far
+
+//reset the game somehow when new number is picked
 
 
 
