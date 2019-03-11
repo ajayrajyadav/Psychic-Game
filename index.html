@@ -17,7 +17,6 @@
         <div class="jumbotron">
             <div class="container text-center text-lg">
                 <h1>Physic game</h1>
-                <h2  id="jumbo-tron"></h2>
             </div>
         </div>
         <div class="container">
@@ -25,19 +24,25 @@
             <hr>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-primary" id="start-game">Start the Game</button>
                         <p id="user-text"><strong>...Nothing.</strong></p>
                         <h2>The word to guess is <p id="correct-word"> <strong> ...nothing yet</strong></p></h2>
                         <p>Guess what letter I'm Thinking</p>
-                        <p id="wins">Wins: 0</p>
-                        <p id="losses">Losses: 0</p>
+                        <p> Wins: <span id="wins-so-far"> 0</span></p>
+                        <p>Losses: <span id="losses-so-far">Losses: 0</span></p>
                         <p id="guesses-left">Guesses Left: 0</p>
-                        <p id="yourGuess">You Guesses so far :</p>
+                        <p>Your Guesses so Far: <span id="yourGuess">0</span></p>
                         <p class="mStyle" id="message"></p>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="jumbotron">
+                <div class="container text-center text-lg">
+                    <h2 id="jumbo-tron"></h2>
+                </div>
+            </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

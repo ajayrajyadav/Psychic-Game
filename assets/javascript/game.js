@@ -27,33 +27,60 @@ var tbCorrectWord = document.getElementById("correct-word");
 var tbGuessesLeft = document.getElementById("guesses-left");
 var tbGuessesSoFar = document.getElementById("yourGuess");
 var tbJumbotronInfobar = document.getElementById("jumbo-tron");
+var tbWinsSoFar = document.getElementById("wins-so-far");
+var tbLossesSoFar = document.getElementById("losses-so-far");
+
+
+document.getElementById("start-game").onclick = function () {
+    startGame();
+};
+
+function publishDefaults(){
+    //maybe add default text when game resets. part of refactor
+}
 
 function resetTheGame() {
+    // tbJumbotronInfobar.textContent= "the game reset";
     gameObject.correctAnswer = "";
     gameObject.yourGuessesSoFar = [];
+    tbGuessesSoFar.textContent = allUserGuesses();
     gameObject.alreadyEntered = -1;
     gameObject.gameOver = false;
     gameObject.dashesAndGuesses = [];
-}
+    tbCorrectWord.textContent = correctAnswerWithDashesAndGuesses("");
 
-tbUserText.textContent = createCorrectAnswer();
-tbCorrectWord.textContent = correctAnswerWithDashesAndGuesses(yourGuess);
-tbGuessesLeft.textContent = gameObject.guess;
-//listen to user when they enter a letter
-document.onkeyup = function (event) {
-    yourGuess = event.key.toLowerCase();
-    if (gameObject.guess > 0 && validateUserGuess(yourGuess)) {
-        tbGuessesLeft.textContent = gameObject.guess;
-    }
-    // tbUserText.textContent = createCorrectAnswer();
-    // tbUserText.textContent = gameObject.correctAnswer;
-    tbCorrectWord.textContent = correctAnswerWithDashesAndGuesses(yourGuess);
-    tbGuessesSoFar.textContent = allUserGuesses();
-    //check if they have guessed all the letters correctly
-    if (hasCorrectAnswerBeenGuessed()) {
-        tbJumbotronInfobar.textContent = "You Win!"
-    }
-};
+}
+function startGame() {
+    resetTheGame();
+    tbJumbotronInfobar.textContent = "New game started..."
+    tbUserText.textContent = createCorrectAnswer();
+    tbCorrectWord.textContent = correctAnswerWithDashesAndGuesses("");
+    tbGuessesLeft.textContent = "You have " + gameObject.guess + " guesses left";
+
+    //listen to user when they enter a letter
+    document.onkeyup = function (event) {
+        tbJumbotronInfobar.textContent = "";
+        yourGuess = event.key.toLowerCase();
+        if (gameObject.guess > 0) {
+            if (validateUserGuess(yourGuess)) {
+                tbGuessesLeft.textContent = "You have " + gameObject.guess + " guesses left";
+                tbCorrectWord.textContent = correctAnswerWithDashesAndGuesses(yourGuess);
+                tbGuessesSoFar.textContent =  allUserGuesses();
+                if (hasCorrectAnswerBeenGuessed()) {
+                    tbJumbotronInfobar.textContent = "You Win!"
+                    gameObject.winsSoFar++;
+                    tbWinsSoFar.textContent = gameObject.winsSoFar;
+                    resetTheGame();
+                }
+            }
+        } else {
+            gameObject.lossesSoFar++;
+            tbLossesSoFar.textContent = gameObject.lossesSoFar;
+            tbJumbotronInfobar.textContent = "Sorry... Better luck next time..."
+            resetTheGame();
+        }
+    };
+}
 
 //has correct answer been guessed?
 function hasCorrectAnswerBeenGuessed() {
@@ -75,7 +102,7 @@ function createCorrectAnswer() {
     gameStarted = true;
     gameObject.dashesAndGuesses = [];
     returnStr = gameObject.correctAnswer = gameObject.superHeroWords[Math.floor(Math.random() * gameObject.superHeroWords.length)];
-    gameObject.guess = returnStr.length * 2;
+    gameObject.guess = returnStr.length;
     return returnStr;
 }
 
@@ -85,15 +112,18 @@ function correctAnswerWithDashesAndGuesses(userGuess) {
         if (userGuess === "") {
             gameObject.dashesAndGuesses[index] = "_";
         } else if (gameObject.correctAnswer[index] === userGuess) {
+            //yay you havde a correct guess
             gameObject.dashesAndGuesses[index] = userGuess;
         }
+        // else{
+        //     gameObject.guess--;
+        // }
     }
     return gameObject.dashesAndGuesses.join(" ");
 }
 
 //make the guesses publishable
 function allUserGuesses() {
-    console.log(gameObject.yourGuessesSoFar.join(", "));
     return gameObject.yourGuessesSoFar.join(", ");
 }
 
@@ -105,13 +135,16 @@ function validateUserGuess(userGuess) {
             //it seems they enter the same letter
             tbJumbotronInfobar.textContent = "You already guessed that letter"
             return false;
-        } else {
-            //only case thats valid
+        } else if (gameObject.correctAnswer.includes(userGuess)) {
             gameObject.yourGuessesSoFar.push(userGuess);
+            return true;
+        } else {
             gameObject.guess--;
+            gameObject.yourGuessesSoFar.push(userGuess);
             return true;
         }
     } else {
+        tbJumbotronInfobar.textContent = "Please guess a letter from alphabet"
         return false;
     }
 }
