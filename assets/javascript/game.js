@@ -8,7 +8,7 @@
 // var correctAnswer; //the letter you are trying to guess
 
 var gameObject = {
-    superHeroWords: ["ironman", "superman", "antman", "vasp", "hulk", "thor", "wonderwoman", "flash", "aquaman", "spiderman"],
+    superHeroWords: ["ironman", "superman", "antman", "vasp", "hulk", "thor", "wonderwoman", "flash", "aquaman", "spiderman", "storm", "blackwidow", "mystique", "loki", "hellboy", "deadpool"],
     alphabet: "abcdefghijklmnopqrstuvwxyz",
     winsSoFar: 0,
     lossesSoFar: 0,
@@ -85,7 +85,6 @@ function startGame() {
 //has correct answer been guessed?
 function hasCorrectAnswerBeenGuessed() {
     var result;
-
     for (let i = 0; i < gameObject.correctAnswer.length; i++) {
         if (gameObject.correctAnswer[i] === gameObject.dashesAndGuesses[i]) {
             result = true;
@@ -115,9 +114,6 @@ function correctAnswerWithDashesAndGuesses(userGuess) {
             //yay you havde a correct guess
             gameObject.dashesAndGuesses[index] = userGuess;
         }
-        // else{
-        //     gameObject.guess--;
-        // }
     }
     return gameObject.dashesAndGuesses.join(" ");
 }
