@@ -9,17 +9,31 @@
 
 var gameObject = {
     superHeroWords: ["ironman", "superman", "antman", "vasp", "hulk", "thor", "wonderwoman", "flash", "aquaman", "spiderman", "storm", "blackwidow", "mystique", "loki", "hellboy", "deadpool"],
+    superClues: ["Wears Iron Suit", "Man of Steel", "Can shrink", "Can Shrink", "Becomes Green", "Has a Hammer", "Has a Lasso", "Can run fast", "Can Breath Under Water", "shoots web", "Can Control Weather", "Natasha Romanova", "Can Shapshift", "God of Mischief","Has Horns", "wears red suit"],
     alphabet: "abcdefghijklmnopqrstuvwxyz",
     winsSoFar: 0,
     lossesSoFar: 0,
     correctAnswer: "",
+    currentClue: "",
     yourGuessesSoFar: [],
     alreadyEntered: -1, //lets keep this as deafult value for now
     gameOver: false,
     dashesAndGuesses: [],
-    guess: 0,
+    guess: 8,
 }
 
+
+var imageArray = [
+    "./assets/images/hangman/0.jpg", 
+    "./assets/images/hangman/1.jpg", 
+    "./assets/images/hangman/2.jpg",
+    "./assets/images/hangman/3.jpg",
+    "./assets/images/hangman/4.jpg",
+    "./assets/images/hangman/5.jpg",
+    "./assets/images/hangman/6.jpg",
+    "./assets/images/hangman/7.jpg",
+    "./assets/images/hangman/8.jpg"
+]
 var yourGuess = ""; //empty string to save your guess
 
 var tbUserText = document.getElementById("user-text");
@@ -29,13 +43,15 @@ var tbGuessesSoFar = document.getElementById("yourGuess");
 var tbJumbotronInfobar = document.getElementById("jumbo-tron");
 var tbWinsSoFar = document.getElementById("wins-so-far");
 var tbLossesSoFar = document.getElementById("losses-so-far");
+var tbCurrentClue = document.getElementById("current-clue");
+var imgHangmanImage = document.getElementById("hangman-Image")
 
 
 document.getElementById("start-game").onclick = function () {
     startGame();
 };
 
-function publishDefaults(){
+function publishDefaults() {
     //maybe add default text when game resets. part of refactor
 }
 
@@ -48,7 +64,8 @@ function resetTheGame() {
     gameObject.gameOver = false;
     gameObject.dashesAndGuesses = [];
     tbCorrectWord.textContent = correctAnswerWithDashesAndGuesses("");
-
+    tbCurrentClue.textContent = "";
+    imgHangmanImage.src = imageArray[imageArray.length-1];
 }
 function startGame() {
     resetTheGame();
@@ -65,7 +82,7 @@ function startGame() {
             if (validateUserGuess(yourGuess)) {
                 tbGuessesLeft.textContent = "You have " + gameObject.guess + " guesses left";
                 tbCorrectWord.textContent = correctAnswerWithDashesAndGuesses(yourGuess);
-                tbGuessesSoFar.textContent =  allUserGuesses();
+                tbGuessesSoFar.textContent = allUserGuesses();
                 if (hasCorrectAnswerBeenGuessed()) {
                     tbJumbotronInfobar.textContent = "You Win!"
                     gameObject.winsSoFar++;
@@ -100,8 +117,10 @@ function hasCorrectAnswerBeenGuessed() {
 function createCorrectAnswer() {
     gameStarted = true;
     gameObject.dashesAndGuesses = [];
-    returnStr = gameObject.correctAnswer = gameObject.superHeroWords[Math.floor(Math.random() * gameObject.superHeroWords.length)];
-    gameObject.guess = returnStr.length;
+    var randNumber = Math.floor(Math.random() * gameObject.superHeroWords.length);
+    returnStr = gameObject.correctAnswer = gameObject.superHeroWords[randNumber];
+    gameObject.currentClue = gameObject.superClues[randNumber];
+    gameObject.guess = 8;
     return returnStr;
 }
 
@@ -136,6 +155,11 @@ function validateUserGuess(userGuess) {
             return true;
         } else {
             gameObject.guess--;
+            if(gameObject.guess === 2)
+            {
+                tbCurrentClue.textContent = "Here is a clue: " + gameObject.currentClue;
+            }
+            imgHangmanImage.src = imageArray[gameObject.guess];
             gameObject.yourGuessesSoFar.push(userGuess);
             return true;
         }

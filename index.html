@@ -25,15 +25,19 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6">
-                        <button type="button" class="btn btn-primary" id="start-game">Start the Game</button>
-                        <p id="user-text"><strong>...Nothing.</strong></p>
+                        <button type="button" class="btn btn-primary btn-lg btn-block" id="start-game">Start New Game</button>
+                        <p style="color:white;" id="user-text"><strong></strong></p>
                         <!-- <h2>The word to guess is <p id="correct-word"> <strong> ...nothing yet</strong></p></h2> -->
                         <p>Guess what letter I'm Thinking</p>
                         <p> Wins: <span id="wins-so-far"> 0</span></p>
                         <p>Losses: <span id="losses-so-far">Losses: 0</span></p>
                         <p id="guesses-left">Guesses Left: 0</p>
                         <p>Your Guesses so Far: <span id="yourGuess">0</span></p>
+                        <p id="current-clue"></p>
                         <p class="mStyle" id="message"></p>
+                    </div>
+                    <div class="col-md-6">
+                            <img src="./assets/images/hangman.jpg" alt="hangman" height=300 width=200 id="hangman-Image">
                     </div>
                 </div>
             </div>
